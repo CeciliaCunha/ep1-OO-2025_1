@@ -1,69 +1,53 @@
 package managers;
 
 import models.Aluno;
-import models.AlunoNormal;
-import models.AlunoEspecial;
-
-import java.io.*;
 import java.util.*;
 
 public class AlunoManager {
-    private Map<String, Aluno> alunos;
-    private final String arquivo = "alunos.txt";
+    private Map<String, Aluno> alunos = new HashMap<>();
 
-    public AlunoManager() {
-        alunos = new HashMap<>();
-        carregarArquivo();
+    public void cadastrarAluno(String matricula, String nome, boolean especial) {
+        if (alunos.containsKey(matricula)) {
+            System.out.println("Aluno ja cadastrado.");
+            return;
+        }
+        Aluno a = new Aluno(matricula, nome, especial);
+        alunos.put(matricula, a);
+        System.out.println("Aluno cadastrado.");
     }
 
-    public boolean adicionarAluno(Aluno aluno) {
-        if (alunos.containsKey(aluno.getMatricula())) {
-            return false;
-        }
-        alunos.put(aluno.getMatricula(), aluno);
-        salvarArquivo();
-        return true;
+    public boolean existe(String matricula) {
+        return alunos.containsKey(matricula);
     }
 
     public Aluno buscarAluno(String matricula) {
         return alunos.get(matricula);
     }
 
-    public boolean removerAluno(String matricula) {
-        if (alunos.containsKey(matricula)) {
-            alunos.remove(matricula);
-            salvarArquivo();
-            return true;
+    public boolean ehEspecial(String matricula) {
+        Aluno a = alunos.get(matricula);
+        if (a == null) return false;
+        return a.isEspecial();
+    }
+
+    public void editarAluno(String matricula, String novoNome, Boolean especial) {
+        Aluno a = alunos.get(matricula);
+        if (a == null) {
+            System.out.println("Aluno nao encontrado.");
+            return;
         }
-        return false;
+        if (novoNome != null) a.setNome(novoNome);
+        if (especial != null) a.setEspecial(especial);
+        System.out.println("Aluno editado.");
     }
 
-    public List<Aluno> listarAlunos() {
-        return new ArrayList<>(alunos.values());
-    }
-
-    public void salvarArquivo() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(arquivo))) {
-            for (Aluno a : alunos.values()) {
-                pw.println(a.toCSV());
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar alunos: " + e.getMessage());
+    public void listarAlunos() {
+        if (alunos.isEmpty()) {
+            System.out.println("Nenhum aluno cadastrado.");
+            return;
         }
-    }
-
-    public void carregarArquivo() {
-        alunos.clear();
-        File f = new File(arquivo);
-        if (!f.exists()) return;
-        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
-            String linha;
-            while ((linha = br.readLine()) != null) {
-                Aluno a = Aluno.fromCSV(linha);
-                if (a != null) alunos.put(a.getMatricula(), a);
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao carregar alunos: " + e.getMessage());
+        for (Aluno a : alunos.values()) {
+            System.out.println(a);
         }
     }
 }

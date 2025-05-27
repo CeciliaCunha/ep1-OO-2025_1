@@ -1,46 +1,46 @@
 package models;
 
-public abstract class Aluno {
-    protected String matricula;
-    protected String nome;
-    protected String curso;
+public class Aluno {
+    private String matricula;
+    private String nome;
+    private boolean especial; // "normal" ou "especial"
 
-    public Aluno(String matricula, String nome, String curso) {
+    public Aluno(String matricula, String nome, boolean tipo) {
         this.matricula = matricula;
         this.nome = nome;
-        this.curso = curso;
+        this.especial = especial;
     }
 
-    public String getMatricula() { return matricula; }
-    public String getNome() { return nome; }
-    public String getCurso() { return curso; }
-
-    public void setNome(String nome) { this.nome = nome; }
-    public void setCurso(String curso) { this.curso = curso; }
-
-    public abstract boolean podeMatricularMais(int qtdMatriculas);
-
-    public abstract boolean recebeNotas();
-
-    // CSV (matricula,nome,curso,tipo)
-    public String toCSV() {
-        return matricula + "," + nome + "," + curso + "," + getTipo();
+    public String getMatricula() {
+        return matricula;
     }
 
-    public static Aluno fromCSV(String csvLine) {
-        String[] parts = csvLine.split(",");
-        if (parts.length < 4) return null;
-        String matricula = parts[0];
-        String nome = parts[1];
-        String curso = parts[2];
-        String tipo = parts[3];
-        if (tipo.equalsIgnoreCase("normal")) {
-            return new AlunoNormal(matricula, nome, curso);
-        } else if (tipo.equalsIgnoreCase("especial")) {
-            return new AlunoEspecial(matricula, nome, curso);
-        }
-        return null;
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
     }
 
-    public abstract String getTipo();
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public boolean isEspecial() {
+        return especial;
+    }
+
+    public void setEspecial(boolean especial) {
+        this.especial = especial;
+    }
+
+    @Override
+    public String toString() {
+        return "Aluno{" +
+                "matricula='" + matricula + '\'' +
+                ", nome='" + nome + '\'' +
+                ", especial ='" + especial + '\'' +
+                '}';
+    }
 }

@@ -1,59 +1,38 @@
 package managers;
 
 import models.Avaliacao;
-
-import java.io.*;
 import java.util.*;
 
 public class AvaliacaoManager {
-    private Map<String, Avaliacao> avaliacoes;
-    private final String arquivo = "avaliacoes.txt";
+    private List<Avaliacao> avaliacoes = new ArrayList<>();
 
-    public AvaliacaoManager() {
-        avaliacoes = new HashMap<>();
-        carregarArquivo();
-    }
-
-    public boolean adicionarAvaliacao(Avaliacao a) {
-        if (avaliacoes.containsKey(a.getIdMatricula())) return false;
-        avaliacoes.put(a.getIdMatricula(), a);
-        salvarArquivo();
-        return true;
-    }
-
-    public Avaliacao buscarAvaliacao(String idMatricula) {
-        return avaliacoes.get(idMatricula);
-    }
-
-    public boolean atualizarAvaliacao(Avaliacao a) {
-        if (!avaliacoes.containsKey(a.getIdMatricula())) return false;
-        avaliacoes.put(a.getIdMatricula(), a);
-        salvarArquivo();
-        return true;
-    }
-
-    public void salvarArquivo() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(arquivo))) {
-            for (Avaliacao a : avaliacoes.values()) {
-                pw.println(a.toCSV());
+    public Avaliacao buscarPorMatricula(String matriculaAluno, String codigoTurma) {
+        for (Avaliacao a : avaliacoes) {
+            if (a.getMatriculaAluno().equals(matriculaAluno) && a.getCodigoTurma().equals(codigoTurma)) {
+                return a;
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar avaliacoes: " + e.getMessage());
         }
+        return null;
     }
 
-    public void carregarArquivo() {
-        avaliacoes.clear();
-        File f = new File(arquivo);
-        if (!f.exists()) return;
-        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
-            String linha;
-            while ((linha = br.readLine()) != null) {
-                Avaliacao a = Avaliacao.fromCSV(linha);
-                if (a != null) avaliacoes.put(a.getIdMatricula(), a);
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao carregar avaliacoes: " + e.getMessage());
+    public void adicionarOuAtualizar(Avaliacao avaliacao) {
+        Avaliacao existente = buscarPorMatricula(avaliacao.getMatriculaAluno(), avaliacao.getCodigoTurma());
+        if (existente == null) {
+            avaliacoes.add(avaliacao);
+        } else {
+            existente.setNota(avaliacao.getNota());
+            existente.setPresenca(avaliacao.getPresenca());
+        }
+        System.out.println("Avaliacao atualizada.");
+    }
+
+    public void listarAvaliacoes() {
+        if (avaliacoes.isEmpty()) {
+            System.out.println("Nenhuma avaliacao cadastrada.");
+            return;
+        }
+        for (Avaliacao a : avaliacoes) {
+            System.out.println(a);
         }
     }
 }
