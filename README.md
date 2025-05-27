@@ -1,76 +1,118 @@
-# Sistema Acadêmico - FCTE
+# 📚 Sistema Acadêmico - FCTE
 
-## Descrição do Projeto
+## 📝 Descrição do Projeto
 
-Desenvolvimento de um sistema acadêmico para gerenciar alunos, disciplinas, professores, turmas, avaliações e frequência, utilizando os conceitos de orientação a objetos (herança, polimorfismo e encapsulamento) e persistência de dados em arquivos.
+Desenvolvimento de um sistema acadêmico para gerenciar alunos, disciplinas, turmas, matrículas e avaliações, utilizando os conceitos de **orientação a objetos** — **herança, polimorfismo e encapsulamento** —, além de **persistência de dados em arquivos CSV**.
 
-O enunciado do trabalho pode ser encontrado aqui:
-- [Trabalho 1 - Sistema Acadêmico](https://github.com/lboaventura25/OO-T06_2025.1_UnB_FCTE/blob/main/trabalhos/ep1/README.md)
-
-## Dados do Aluno
-
-- **Nome completo:** [Preencher aqui]
-- **Matrícula:** [Preencher aqui]
-- **Curso:** [Preencher aqui]
-- **Turma:** [Preencher aqui]
+Este sistema permite o cadastro de alunos (normais ou especiais), disciplinas, turmas, lançamento de avaliações e controle de matrícula com validação de vagas e limites máximos.
 
 ---
 
-## Instruções para Compilação e Execução
+## 👨‍🎓 Dados do Aluno
 
-1. **Compilação:**  
-   [Descrever aqui como compilar o projeto. Exemplo: `javac Main.java` ou o script usado]
-
-2. **Execução:**  
-   [Descrever aqui como executar o projeto. Exemplo: `java Main` ou o script usado]
-
-3. **Estrutura de Pastas:**  
-   [Descrever aqui as principais pastas do projeto]
-
-3. **Versão do JAVA utilizada:**  
-   [Descrever aqui como versão do JAVA utilizada no projeto. Sugestão: `java 21`]
+- **Nome completo:** [Cecília Costa Rebelo Cunha]
+- **Matrícula:** [232001415]
+- **Curso:** [Engenharia de Software]
+- **Turma:** [T06]
 
 ---
 
-## Vídeo de Demonstração
+## ⚙️ Instruções para Compilação e Execução
 
-- [Inserir o link para o vídeo no YouTube/Drive aqui]
+### ✅ Compilação
 
----
+Execute o seguinte comando no terminal, dentro da pasta raiz do projeto:
 
-## Prints da Execução
+```bash
+javac -d bin src/models/*.java src/managers/*.java src/App.java
+```
 
-1. Menu Principal:  
-   ![Inserir Print 1](caminho/do/print1.png)
+### ▶️ Execução
 
-2. Cadastro de Aluno:  
-   ![Inserir Print 2](caminho/do/print2.png)
+Execute o programa com:
 
-3. Relatório de Frequência/Notas:  
-   ![Inserir Print 3](caminho/do/print3.png)
+```bash
+java -cp bin App
+```
 
----
-
-## Principais Funcionalidades Implementadas
-
-- [ ] Cadastro, listagem, matrícula e trancamento de alunos (Normais e Especiais)
-- [ ] Cadastro de disciplinas e criação de turmas (presenciais e remotas)
-- [ ] Matrícula de alunos em turmas, respeitando vagas e pré-requisitos
-- [ ] Lançamento de notas e controle de presença
-- [ ] Cálculo de média final e verificação de aprovação/reprovação
-- [ ] Relatórios de desempenho acadêmico por aluno, turma e disciplina
-- [ ] Persistência de dados em arquivos (.txt ou .csv)
-- [ ] Tratamento de duplicidade de matrículas
-- [ ] Uso de herança, polimorfismo e encapsulamento
+> ⚠️ Certifique-se de estar na pasta raiz do projeto ao executar esse comando.
 
 ---
 
-## Observações (Extras ou Dificuldades)
+## 📂 Estrutura de Pastas
 
-- [Espaço para o aluno comentar qualquer funcionalidade extra que implementou, dificuldades enfrentadas, ou considerações importantes.]
+```
+ep1-OO-2025/
+│
+│
+├── bin/                # Arquivos compilados (.class)
+│
+├── src/                # Código-fonte
+│   ├── models/         # Classes de modelo (Aluno, Disciplina, Turma, Avaliacao, Matricula)
+│   ├── managers/       # Classes gerenciadoras (AlunoManager, DisciplinaManager, etc.)
+│   └── App.java        # Classe principal (main)
+│
+├── README.md           
+└── ...
+```
 
 ---
 
-## Contato
+## ☕️ Versão do JAVA utilizada
 
-- [Opcional: E-mail pessoal do aluno.]
+- Java **21**
+
+---
+
+## 🎥 Vídeo de Demonstração
+
+📺 [(https://drive.google.com/file/d/19ICDh-oZOkKvOmznszTDKbVr5gI3c0o6/view?usp=drive_link)]
+
+---
+
+## 🖼️ Prints da Execução
+
+### 🔸 Menu Principal
+
+![Menu Principal](./prints/menu.png)
+
+### 🔸 Cadastro de Aluno
+
+![Cadastro de Aluno](./prints/cadastro_disciplina.png)
+
+### 🔸 Lista de Disciplinas
+
+![Lista de Disciplinas](./prints/lista_disciplina.png)
+
+---
+
+## 🚀 Principais Funcionalidades Implementadas
+
+- ✅ Cadastro e listagem de alunos (**normais e especiais**)
+- ✅ Cadastro de disciplinas
+- ✅ Cadastro de turmas (com controle de vagas)
+- ✅ Matrícula de alunos em turmas, respeitando:
+  - Limite de matrículas (6 para aluno normal, 8 para especial)
+  - Disponibilidade de vagas
+- ✅ Lançamento de **notas** e **presença (%)**
+- ✅ Listagem de avaliações
+- ✅ Armazenamento persistente dos dados em arquivos CSV
+- ✅ Uso dos pilares da **orientação a objetos**:
+  - **Herança:** Aluno especial herda de aluno
+  - **Encapsulamento:** Atributos privados, acesso por getters e setters
+  - **Polimorfismo:** Operações comuns entre classes (ex.: listagem)
+- ✅ Validação de dados e mensagens de erro amigáveis
+
+---
+
+## 💡 Observações (Extras ou Dificuldades)
+
+- 💪 Desafio principal foi gerenciar a lógica de matrícula com verificação de limites de alunos normais e especiais, além da persistência correta nos arquivos CSV.
+- 🚀 Implementação focada em funcionamento robusto no terminal.
+- 🔥 Dificuldades enfrentadas na conciliação entre herança e serialização CSV foram superadas.
+
+---
+
+## 📬 Contato
+
+- cecilia.cunha2004@gmail.com
