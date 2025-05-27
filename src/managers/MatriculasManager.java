@@ -51,4 +51,15 @@ public class MatriculasManager {
         }
         return null;
     }
+
+    // Trancar disciplina
+    public void trancarDisciplina(Aluno aluno, String codigoDisciplina) {
+        aluno.trancarDisciplina(codigoDisciplina);
+    }
+
+    // Trancar semestre
+    public void trancarSemestre(Aluno aluno) {
+        aluno.trancarSemestre();
+    }
 }
+

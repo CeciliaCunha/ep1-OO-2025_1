@@ -8,6 +8,7 @@ import java.util.List;
  */
 
 public class Turma {
+    private Disciplina disciplina; 
     private String codigoTurma;
     private String codigoDisciplina;
     private String professor;
@@ -21,7 +22,8 @@ public class Turma {
     // Lista de matrículas
     private List<Matricula> matriculas = new ArrayList<>();
 
-    public Turma(String codigoTurma, String codigoDisciplina, String professor, String semestre, String formaAvaliacao, boolean presencial, String sala, String horario, int capacidadeMaxima){
+    public Turma(Disciplina disciplina, String codigoTurma, String codigoDisciplina, String professor, String semestre, String formaAvaliacao, boolean presencial, String sala, String horario, int capacidadeMaxima){
+        this.disciplina = disciplina;
         this.codigoTurma = codigoTurma;
         this.codigoDisciplina = codigoDisciplina;
         this.professor = professor;
@@ -38,7 +40,6 @@ public class Turma {
         return matriculas;
     }
 
-    
     public int getVagasDisponiveis() {
         return capacidadeMaxima - matriculas.size();
     }
@@ -49,6 +50,14 @@ public class Turma {
         } else {
             throw new IllegalStateException("Turma sem vagas disponíveis.");
         }
+    }
+
+    public void removerMatricula(Matricula matricula) {
+        matriculas.remove(matricula);
+    }
+
+    public Disciplina getDisciplina() {
+        return disciplina;
     }
 
     public String getCodigoTurma() {

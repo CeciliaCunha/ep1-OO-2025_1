@@ -16,10 +16,43 @@ public class Aluno {
 
     private List<Matricula> matriculas = new ArrayList<>();
 
+    private List<Matricula> disciplinasTrancadas = new ArrayList<>();
+
     public Aluno(String nome, String matricula, String curso) {
         this.nome = nome;
         this.matricula = matricula;
         this.curso = curso;
+    }
+
+    public void trancarDisciplina(String codigoDisciplina) {
+        Matricula matriculaEncontrada = null;
+        for (Matricula m : matriculas) {
+            if (m.getTurma().getDisciplina().getCodigo().equals(codigoDisciplina)) {
+                matriculaEncontrada = m;
+                break;
+            }
+        }
+        if (matriculaEncontrada != null) {
+            matriculas.remove(matriculaEncontrada);
+            if (!disciplinasTrancadas.contains(matriculaEncontrada)) {
+                disciplinasTrancadas.add(matriculaEncontrada);
+            }
+            matriculaEncontrada.getTurma().removerMatricula(matriculaEncontrada);
+            System.out.println("Disciplina " + codigoDisciplina + " trancada com sucesso.");
+        } else {
+            System.out.println("Disciplina " + codigoDisciplina + " não encontrada na matrícula.");
+        }
+    }
+
+    public void trancarSemestre() {
+        for (Matricula m : new ArrayList<>(matriculas)) {
+            if (!disciplinasTrancadas.contains(m)) {
+                disciplinasTrancadas.add(m);
+            }
+            m.getTurma().removerMatricula(m);
+        }
+        matriculas.clear();
+        System.out.println("Semestre trancado com sucesso.");
     }
 
     public boolean cursouDisciplina(String codigoDisciplina) {
