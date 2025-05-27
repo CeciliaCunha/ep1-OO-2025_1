@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,8 @@ public class Disciplina {
     private String nome;
     private String codigo;
     private int cargaHoraria;
-    private List<String> preRequisitos;
+
+    private List<String> preRequisitos = new ArrayList<>();
     
     public Disciplina(String nome, String codigo, int cargaHoraria, List<String> preRequisitos) {
         this.nome = nome;
@@ -47,8 +49,8 @@ public class Disciplina {
         this.cargaHoraria = cargaHoraria;
     }
 
-    public void setPreRequisitos(List<String> preRequisitos) {
-        this.preRequisitos = preRequisitos;
+    public void adicionarPreRequisito(String codigoDisciplina) {
+        preRequisitos.add(codigoDisciplina);
     }
 
     @Override

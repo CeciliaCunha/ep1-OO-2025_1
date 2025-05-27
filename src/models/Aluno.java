@@ -12,8 +12,17 @@ public class Aluno {
     private String matricula;
     private String curso;
 
+    private List<String> disciplinasCursadas;
+
     private List<Matricula> matriculas = new ArrayList<>();
 
+    public boolean cursouDisciplina(String codigoDisciplina) {
+        if (disciplinasCursadas == null) {
+            return false;
+        }
+        return disciplinasCursadas.contains(codigoDisciplina);
+    }
+    
     public Aluno(String nome, String matricula, String curso) {
         this.nome = nome;
         this.matricula = matricula;
