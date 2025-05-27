@@ -39,6 +39,10 @@ public class Aluno {
         this.curso = curso;
     }
 
+    public boolean isAlunoEspecial() {
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Aluno: " + nome + " | Matricula: " + matricula + " | Curso: " + curso;
