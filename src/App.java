@@ -1,80 +1,368 @@
-import managers.*;
-import models.*;
-import java.util.*;
+import managers.AlunoManager;
+import managers.DisciplinaManager;
+import managers.AvaliacaoManager;
+
+import java.util.Scanner;
 
 public class App {
+    private static Scanner scanner = new Scanner(System.in);
+
+    private static AlunoManager alunoManager = new AlunoManager();
+    private static DisciplinaManager disciplinaManager = new DisciplinaManager();
+    private static AvaliacaoManager avaliacaoManager = new AvaliacaoManager();
+
     public static void main(String[] args) {
-        // Cria managers
-        AlunoManager alunoManager = new AlunoManager();
-        DisciplinaManager disciplinaManager = new DisciplinaManager();
-        TurmaManager turmaManager = new TurmaManager();
-        MatriculasManager matriculasManager = new MatriculasManager();
+        boolean rodando = true;
 
-        // Cria algumas disciplinas com pré-requisitos
-        Disciplina d1 = new Disciplina("Matemática Básica", "MAT101", 60, new ArrayList<>());
-        Disciplina d2 = new Disciplina("Cálculo I", "MAT102", 60, Arrays.asList("MAT101"));
-        Disciplina d3 = new Disciplina("Física I", "FIS101", 60, new ArrayList<>());
+        while (rodando) {
+            exibirMenuPrincipal();
+            int opcao = lerOpcao();
 
-        disciplinaManager.adicionarDisciplina(d1);
-        disciplinaManager.adicionarDisciplina(d2);
-        disciplinaManager.adicionarDisciplina(d3);
-
-        // Cria turmas para as disciplinas
-        Turma t1 = new Turma(d1, "TURMA1", "MAT101", "Prof. Silva", "2025/1", "1", true, "Sala 101", "08:00", 2);
-        Turma t2 = new Turma(d2, "TURMA2", "MAT102", "Prof. Costa", "2025/1", "1", true, "Sala 102", "10:00", 2);
-        Turma t3 = new Turma(d3, "TURMA3", "FIS101", "Prof. Souza", "2025/1", "1", true, "Sala 103", "14:00", 2);
-
-        turmaManager.adicionarTurma(t1);
-        turmaManager.adicionarTurma(t2);
-        turmaManager.adicionarTurma(t3);
-
-        // Cria alunos
-        Aluno a1 = new Aluno("João", "123", "Engenharia");
-        AlunoEspecial a2 = new AlunoEspecial("Maria", "456", "Engenharia");
-
-        alunoManager.adicionarAluno(a1);
-        alunoManager.adicionarAluno(a2);
-
-        // Aluno João já cursou MAT101, para simular pré-requisito cumprido
-        a1.getMatriculas().add(new Matricula(a1, t1));
-        a1.atualizarDisciplinasCursadas();
-
-        try {
-            // Matricular João em Cálculo I (que tem pré-requisito MAT101)
-            matriculasManager.matricularAluno(a1, t2, disciplinaManager.listarDisciplinas());
-
-            // Matricular Maria (AlunoEspecial) na Física I
-            matriculasManager.matricularAluno(a2, t3, disciplinaManager.listarDisciplinas());
-
-            // Testar trancamento de disciplina
-            matriculasManager.trancarDisciplina(a1, "MAT102");
-
-            // Listar alunos matriculados na turma 2
-            System.out.println("Alunos na turma " + t2.getCodigoTurma() + ":");
-            for (Matricula m : t2.getMatriculas()) {
-                System.out.println(m);
+            switch (opcao) {
+                case 1:
+                    modoAluno();
+                    break;
+                case 2:
+                    modoDisciplinaTurma();
+                    break;
+                case 3:
+                    modoAvaliacaoFrequencia();
+                    break;
+                case 0:
+                    System.out.println("Saindo do sistema. Até logo!");
+                    rodando = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida, tente novamente.");
             }
-
-        } catch (Exception e) {
-            System.out.println("Erro: " + e.getMessage());
         }
 
-        // Listar todos alunos
-        System.out.println("\nLista de alunos:");
-        for (Aluno aluno : alunoManager.listarAlunos()) {
-            System.out.println(aluno);
+        scanner.close();
+    }
+
+    private static void exibirMenuPrincipal() {
+        System.out.println("\n=== Sistema Acadêmico FCTE ===");
+        System.out.println("1 - Modo Aluno (Normal e Especial)");
+        System.out.println("2 - Modo Disciplina/Turma");
+        System.out.println("3 - Modo Avaliação/Frequência");
+        System.out.println("0 - Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    private static int lerOpcao() {
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private static void modoAluno() {
+        boolean voltar = false;
+        while (!voltar) {
+            System.out.println("\n-- Modo Aluno --");
+            System.out.println("1 - Cadastrar aluno");
+            System.out.println("2 - Listar alunos");
+            System.out.println("3 - Matricular aluno");
+            System.out.println("4 - Trancar disciplina/semestre");
+            System.out.println("5 - Salvar dados");
+            System.out.println("6 - Carregar dados");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opção: ");
+
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    alunoManager.cadastrarAluno(scanner);
+                    break;
+                case 2:
+                    alunoManager.listarAlunos();
+                    break;
+                case 3:
+                    alunoManager.matricularAluno(scanner);
+                    break;
+                case 4:
+                    alunoManager.trancarDisciplinaOuSemestre(scanner);
+                    break;
+                case 5:
+                    alunoManager.salvarDados();
+                    break;
+                case 6:
+                    alunoManager.carregarDados();
+                    break;
+                case 0:
+                    voltar = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    private static void modoDisciplinaTurma() {
+        boolean voltar = false;
+        while (!voltar) {
+            System.out.println("\n-- Modo Disciplina/Turma --");
+            System.out.println("1 - Cadastrar disciplina");
+            System.out.println("2 - Criar turma");
+            System.out.println("3 - Listar turmas");
+            System.out.println("4 - Listar alunos por turma");
+            System.out.println("5 - Salvar dados");
+            System.out.println("6 - Carregar dados");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opção: ");
+
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    disciplinaManager.cadastrarDisciplina(scanner);
+                    break;
+                case 2:
+                    disciplinaManager.criarTurma(scanner);
+                    break;
+                case 3:
+                    disciplinaManager.listarTurmas();
+                    break;
+                case 4:
+                    disciplinaManager.listarAlunosPorTurma(scanner);
+                    break;
+                case 5:
+                    disciplinaManager.salvarDados();
+                    break;
+                case 6:
+                    disciplinaManager.carregarDados();
+                    break;
+                case 0:
+                    voltar = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    private static void modoAvaliacaoFrequencia() {
+        boolean voltar = false;
+        while (!voltar) {
+            System.out.println("\n-- Modo Avaliação/Frequência --");
+            System.out.println("1 - Lançar notas e presença");
+            System.out.println("2 - Exibir relatório por turma");
+            System.out.println("3 - Exibir relatório por disciplina");
+            System.out.println("4 - Exibir relatório por professor");
+            System.out.println("5 - Exibir boletim do aluno");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opção: ");
+
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    avaliacaoManager.lancarNotasFrequencia(scanner);
+                    break;
+                case 2:
+                    avaliacaoManager.relatorioPorTurma(scanner);
+                    break;
+                case 3:
+                    avaliacaoManager.relatorioPorDisciplina(scanner);
+                    break;
+                case 4:
+                    avaliacaoManager.relatorioPorProfessor(scanner);
+                    break;
+                case 5:
+                    avaliacaoManager.exibirBoletim(scanner);
+                    break;
+                case 0:
+                    voltar = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+}
+import managers.AlunoManager;
+import managers.DisciplinaManager;
+import managers.AvaliacaoManager;
+
+import java.util.Scanner;
+
+public class App {
+    private static Scanner scanner = new Scanner(System.in);
+
+    private static AlunoManager alunoManager = new AlunoManager();
+    private static DisciplinaManager disciplinaManager = new DisciplinaManager();
+    private static AvaliacaoManager avaliacaoManager = new AvaliacaoManager();
+
+    public static void main(String[] args) {
+        boolean rodando = true;
+
+        while (rodando) {
+            exibirMenuPrincipal();
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    modoAluno();
+                    break;
+                case 2:
+                    modoDisciplinaTurma();
+                    break;
+                case 3:
+                    modoAvaliacaoFrequencia();
+                    break;
+                case 0:
+                    System.out.println("Saindo do sistema. Até logo!");
+                    rodando = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida, tente novamente.");
+            }
         }
 
-        // Listar todas disciplinas
-        System.out.println("\nLista de disciplinas:");
-        for (Disciplina disc : disciplinaManager.listarDisciplinas()) {
-            System.out.println(disc);
-        }
+        scanner.close();
+    }
 
-        // Listar turmas por disciplina
-        System.out.println("\nTurmas da disciplina MAT102:");
-        for (Turma turma : turmaManager.buscarPorCodigoDisciplina("MAT102")) {
-            System.out.println(turma);
+    private static void exibirMenuPrincipal() {
+        System.out.println("\n=== Sistema Acadêmico FCTE ===");
+        System.out.println("1 - Modo Aluno (Normal e Especial)");
+        System.out.println("2 - Modo Disciplina/Turma");
+        System.out.println("3 - Modo Avaliação/Frequência");
+        System.out.println("0 - Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    private static int lerOpcao() {
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private static void modoAluno() {
+        boolean voltar = false;
+        while (!voltar) {
+            System.out.println("\n-- Modo Aluno --");
+            System.out.println("1 - Cadastrar aluno");
+            System.out.println("2 - Listar alunos");
+            System.out.println("3 - Matricular aluno");
+            System.out.println("4 - Trancar disciplina/semestre");
+            System.out.println("5 - Salvar dados");
+            System.out.println("6 - Carregar dados");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opção: ");
+
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    alunoManager.cadastrarAluno(scanner);
+                    break;
+                case 2:
+                    alunoManager.listarAlunos();
+                    break;
+                case 3:
+                    alunoManager.matricularAluno(scanner);
+                    break;
+                case 4:
+                    alunoManager.trancarDisciplinaOuSemestre(scanner);
+                    break;
+                case 5:
+                    alunoManager.salvarDados();
+                    break;
+                case 6:
+                    alunoManager.carregarDados();
+                    break;
+                case 0:
+                    voltar = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    private static void modoDisciplinaTurma() {
+        boolean voltar = false;
+        while (!voltar) {
+            System.out.println("\n-- Modo Disciplina/Turma --");
+            System.out.println("1 - Cadastrar disciplina");
+            System.out.println("2 - Criar turma");
+            System.out.println("3 - Listar turmas");
+            System.out.println("4 - Listar alunos por turma");
+            System.out.println("5 - Salvar dados");
+            System.out.println("6 - Carregar dados");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opção: ");
+
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    disciplinaManager.cadastrarDisciplina(scanner);
+                    break;
+                case 2:
+                    disciplinaManager.criarTurma(scanner);
+                    break;
+                case 3:
+                    disciplinaManager.listarTurmas();
+                    break;
+                case 4:
+                    disciplinaManager.listarAlunosPorTurma(scanner);
+                    break;
+                case 5:
+                    disciplinaManager.salvarDados();
+                    break;
+                case 6:
+                    disciplinaManager.carregarDados();
+                    break;
+                case 0:
+                    voltar = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    private static void modoAvaliacaoFrequencia() {
+        boolean voltar = false;
+        while (!voltar) {
+            System.out.println("\n-- Modo Avaliação/Frequência --");
+            System.out.println("1 - Lançar notas e presença");
+            System.out.println("2 - Exibir relatório por turma");
+            System.out.println("3 - Exibir relatório por disciplina");
+            System.out.println("4 - Exibir relatório por professor");
+            System.out.println("5 - Exibir boletim do aluno");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opção: ");
+
+            int opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    avaliacaoManager.lancarNotasFrequencia(scanner);
+                    break;
+                case 2:
+                    avaliacaoManager.relatorioPorTurma(scanner);
+                    break;
+                case 3:
+                    avaliacaoManager.relatorioPorDisciplina(scanner);
+                    break;
+                case 4:
+                    avaliacaoManager.relatorioPorProfessor(scanner);
+                    break;
+                case 5:
+                    avaliacaoManager.exibirBoletim(scanner);
+                    break;
+                case 0:
+                    voltar = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
         }
     }
 }

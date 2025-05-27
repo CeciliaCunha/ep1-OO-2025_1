@@ -1,11 +1,5 @@
 package models;
 
-/**
- * Representa um aluno especial, que possui restrições específicas:
- * - Pode cursar no máximo duas disciplinas.
- * - Não recebe notas, apenas presença.
- */
-
 public class AlunoEspecial extends Aluno {
 
     public AlunoEspecial(String nome, String matricula, String curso) {
@@ -13,12 +7,14 @@ public class AlunoEspecial extends Aluno {
     }
 
     @Override
-    public boolean isAlunoEspecial() {
-        return true;
+    public boolean podeCursarMaisDisciplinas(int matriculasAtuais) {
+        // Aluno especial pode cursar no máximo 2 disciplinas
+        return matriculasAtuais < 2;
     }
 
     @Override
-    public String toString() {
-        return "[Aluno Especial] " + super.toString();
+    public boolean recebeNotas() {
+        // Aluno especial não recebe notas, só frequência
+        return false;
     }
 }
