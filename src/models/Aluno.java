@@ -1,5 +1,8 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Representa um aluno.
  */
@@ -9,11 +12,22 @@ public class Aluno {
     private String matricula;
     private String curso;
 
+    private List<Matricula> matriculas = new ArrayList<>();
+
     public Aluno(String nome, String matricula, String curso) {
         this.nome = nome;
         this.matricula = matricula;
         this.curso = curso;
     }
+
+    public List<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    public void adicionarMatricula(Matricula matricula) {
+        matriculas.add(matricula);
+    }
+
 
     public String getNome() {
         return nome;

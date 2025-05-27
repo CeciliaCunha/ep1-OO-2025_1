@@ -1,5 +1,8 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Representa uma turma de uma disciplina.
  */
@@ -15,7 +18,10 @@ public class Turma {
     private String horario;
     private int capacidadeMaxima;
 
-    public Turma(String codigoDisciplina, String professor, String semestre, String formaAvaliacao, boolean presencial, String sala, String horario, int capacidadeMaxima){
+    // Lista de matrículas
+    private List<Matricula> matriculas = new ArrayList<>();
+
+    public Turma(String codigoTurma, String codigoDisciplina, String professor, String semestre, String formaAvaliacao, boolean presencial, String sala, String horario, int capacidadeMaxima){
         this.codigoTurma = codigoTurma;
         this.codigoDisciplina = codigoDisciplina;
         this.professor = professor;
@@ -25,6 +31,24 @@ public class Turma {
         this.sala = sala;
         this.horario = horario;
         this.capacidadeMaxima = capacidadeMaxima;
+    }
+
+    // Métodos para matrículas
+    public List<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    
+    public int getVagasDisponiveis() {
+        return capacidadeMaxima - matriculas.size();
+    }
+
+    public void adicionarMatricula(Matricula matricula) {
+        if (getVagasDisponiveis() > 0) {
+            matriculas.add(matricula);
+        } else {
+            throw new IllegalStateException("Turma sem vagas disponíveis.");
+        }
     }
 
     public String getCodigoTurma() {
