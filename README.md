@@ -41,6 +41,7 @@ java -cp bin App
 
 ## 📂 Estrutura de Pastas
 
+```
 ep1-OO-2025_1/
 ├── prints/             # Prints de tela para o README ou entrega
 ├── src/                # Código fonte Java
@@ -50,6 +51,7 @@ ep1-OO-2025_1/
 ├── README.md           # Documento de descrição do projeto
 ├── .gitignore          # Arquivos/pastas ignorados pelo Git
 
+```
 
 ---
 
