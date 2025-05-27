@@ -2,7 +2,6 @@ package managers;
 
 import models.Turma;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,44 +12,33 @@ public class TurmaManager {
         turmas = new ArrayList<>();
     }
 
-    public void adicionarTurma(Turma t) {
+    public boolean adicionarTurma(Turma t) {
+        if (buscarTurma(t.getDisciplina().getCodigo(), t.getSemestre()) != null) {
+            return false; // Já existe turma dessa disciplina no semestre
+        }
         turmas.add(t);
+        return true;
     }
 
-    public List<Turma> getTurmas() {
-        return turmas;
-    }
-
-    public Turma buscarTurmaPorCodigo(String codigoDisciplina) {
+    public Turma buscarTurma(String codigoDisciplina, String semestre) {
         for (Turma t : turmas) {
-            if (t.getCodigoDisciplina().equals(codigoDisciplina)) {
+            if (t.getDisciplina().getCodigo().equals(codigoDisciplina) && t.getSemestre().equals(semestre)) {
                 return t;
             }
         }
         return null;
     }
 
-    public void removerTurma(String codigoDisciplina) {
-        turmas.removeIf(t -> t.getCodigoDisciplina().equals(codigoDisciplina));
+    public List<Turma> listarTurmas() {
+        return turmas;
     }
 
-    public void salvarArquivo(String nomeArquivo) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
-            for (Turma t : turmas) {
-                writer.write(t.toCSVString());
-                writer.newLine();
-            }
+    public boolean removerTurma(String codigoDisciplina, String semestre) {
+        Turma t = buscarTurma(codigoDisciplina, semestre);
+        if (t != null) {
+            turmas.remove(t);
+            return true;
         }
-    }
-
-    public void carregarArquivo(String nomeArquivo) throws IOException {
-        turmas.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                Turma t = Turma.fromCSVString(linha);
-                turmas.add(t);
-            }
-        }
+        return false;
     }
 }

@@ -1,8 +1,9 @@
 package managers;
 
+import models.Aluno;
 import models.Matricula;
+import models.Turma;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,45 +14,37 @@ public class MatriculaManager {
         matriculas = new ArrayList<>();
     }
 
-    public void adicionarMatricula(Matricula m) {
+    public boolean matricularAluno(Aluno aluno, Turma turma) {
+        // Verifica limite do aluno
+        if (aluno.getMatriculas().size() >= aluno.maxDisciplinas()) {
+            return false;
+        }
+
+        // Verifica se turma está cheia
+        if (turma.getMatriculas().size() >= turma.getCapacidadeMaxima()) {
+            return false;
+        }
+
+        Matricula m = new Matricula(aluno, turma);
+        aluno.adicionarMatricula(m);
+        turma.adicionarMatricula(m);
         matriculas.add(m);
+        return true;
     }
 
-    public List<Matricula> getMatriculas() {
+    public List<Matricula> listarMatriculas() {
         return matriculas;
     }
 
-    public void removerMatricula(String matriculaAluno, String codigoTurma) {
-        matriculas.removeIf(m -> m.getMatriculaAluno().equals(matriculaAluno) && m.getCodigoTurma().equals(codigoTurma));
-    }
+    public boolean cancelarMatricula(Matricula matricula) {
+        Aluno aluno = matricula.getAluno();
+        Turma turma = matricula.getTurma();
 
-    public List<Matricula> buscarPorAluno(String matriculaAluno) {
-        List<Matricula> resultado = new ArrayList<>();
-        for (Matricula m : matriculas) {
-            if (m.getMatriculaAluno().equals(matriculaAluno)) {
-                resultado.add(m);
-            }
+        if (matriculas.remove(matricula)) {
+            aluno.trancarMatricula(matricula);
+            turma.getMatriculas().remove(matricula);
+            return true;
         }
-        return resultado;
-    }
-
-    public void salvarArquivo(String nomeArquivo) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
-            for (Matricula m : matriculas) {
-                writer.write(m.toCSVString());
-                writer.newLine();
-            }
-        }
-    }
-
-    public void carregarArquivo(String nomeArquivo) throws IOException {
-        matriculas.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                Matricula m = Matricula.fromCSVString(linha);
-                matriculas.add(m);
-            }
-        }
+        return false;
     }
 }

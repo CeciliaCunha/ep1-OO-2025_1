@@ -1,49 +1,25 @@
 package managers;
 
 import models.Avaliacao;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import models.Matricula;
+import models.Turma;
 
 public class AvaliacaoManager {
-    private List<Avaliacao> avaliacoes;
 
-    public AvaliacaoManager() {
-        avaliacoes = new ArrayList<>();
-    }
+    public void atualizarNotas(Matricula matricula, double p1, double p2, double p3, double listas, double seminario,
+                               int presencas, int aulasMinistradas) {
+        Avaliacao a = matricula.getAvaliacao();
+        a.setP1(p1);
+        a.setP2(p2);
+        a.setP3(p3);
+        a.setListas(listas);
+        a.setSeminario(seminario);
+        a.setPresencas(presencas);
+        a.setAulasMinistradas(aulasMinistradas);
 
-    public void adicionarAvaliacao(Avaliacao a) {
-        avaliacoes.add(a);
-    }
+        Turma turma = matricula.getTurma();
+        boolean mediaPonderada = "MediaPonderada".equalsIgnoreCase(turma.getFormaAvaliacao());
 
-    public List<Avaliacao> getAvaliacoes() {
-        return avaliacoes;
-    }
-
-    public void removerAvaliacao(int index) {
-        if (index >= 0 && index < avaliacoes.size()) {
-            avaliacoes.remove(index);
-        }
-    }
-
-    public void salvarArquivo(String nomeArquivo) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
-            for (Avaliacao a : avaliacoes) {
-                writer.write(a.toCSVString());
-                writer.newLine();
-            }
-        }
-    }
-
-    public void carregarArquivo(String nomeArquivo) throws IOException {
-        avaliacoes.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                Avaliacao a = Avaliacao.fromCSVString(linha);
-                avaliacoes.add(a);
-            }
-        }
+        a.avaliar(mediaPonderada);
     }
 }

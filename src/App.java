@@ -1,86 +1,49 @@
-import managers.*;
 import models.*;
+import managers.*;
 
 public class App {
     public static void main(String[] args) {
-        // Instanciando os managers
         AlunoManager alunoManager = new AlunoManager();
         DisciplinaManager disciplinaManager = new DisciplinaManager();
         TurmaManager turmaManager = new TurmaManager();
         MatriculaManager matriculaManager = new MatriculaManager();
         AvaliacaoManager avaliacaoManager = new AvaliacaoManager();
 
-        // 🔹 Cadastrando alunos
-        alunoManager.adicionarAluno(new AlunoNormal("A001", "João Silva", "Engenharia"));
-        alunoManager.adicionarAluno(new AlunoEspecial("A002", "Maria Souza", "Computação"));
+        // Criar alunos
+        Aluno aluno1 = new AlunoNormal("João Silva", "2025001", "Engenharia");
+        Aluno aluno2 = new AlunoEspecial("Maria Santos", "2025002", "Ciência da Computação");
 
-        // 🔹 Cadastrando disciplinas
-        disciplinaManager.adicionarDisciplina(new Disciplina("POO001", "Programação Orientada a Objetos"));
+        alunoManager.adicionarAluno(aluno1);
+        alunoManager.adicionarAluno(aluno2);
 
-        // 🔹 Criando turma
-        Disciplina disciplina = disciplinaManager.buscarDisciplinaPorCodigo("POO001");
-        if (disciplina != null) {
-            turmaManager.adicionarTurma(new Turma("TURMA1", disciplina.getCodigo()));
-        } else {
-            System.out.println("Disciplina não encontrada para criar turma.");
-            return;
-        }
+        // Criar disciplinas
+        Disciplina d1 = new Disciplina("Programação I", "PROG101", 60);
+        Disciplina d2 = new Disciplina("Matemática Discreta", "MAT102", 60);
+        disciplinaManager.adicionarDisciplina(d1);
+        disciplinaManager.adicionarDisciplina(d2);
 
-        // 🔹 Realizando matrícula
-        Aluno aluno = alunoManager.buscarAlunoPorMatricula("A001");
-        Turma turma = turmaManager.buscarTurmaPorCodigo("TURMA1");
+        // Criar turma
+        Turma t1 = new Turma(d1, "Prof. Carlos", "2025.1", "MediaSimples", true, "Sala 101", "Seg 10h-12h", 30);
+        turmaManager.adicionarTurma(t1);
 
-        if (aluno != null && turma != null) {
-            matriculaManager.adicionarMatricula(new Matricula(aluno.getMatricula(), turma.getCodigoDisciplina()));
-        } else {
-            System.out.println("Aluno ou Turma não encontrado para matrícula.");
-            return;
-        }
+        // Matricular alunos
+        boolean matriculaSucesso1 = matriculaManager.matricularAluno(aluno1, t1);
+        boolean matriculaSucesso2 = matriculaManager.matricularAluno(aluno2, t1);
 
-        // 🔹 Lançando notas e frequência
-        Matricula matricula = matriculaManager.buscarPorAluno("A001").stream()
-                .filter(m -> m.getCodigoTurma().equals("TURMA1"))
-                .findFirst()
-                .orElse(null);
+        System.out.println("Matrícula João: " + matriculaSucesso1);
+        System.out.println("Matrícula Maria: " + matriculaSucesso2);
 
-        if (matricula != null) {
-            // Criando Avaliação para a matrícula
-            Avaliacao avaliacao = new Avaliacao(8.0, 7.5, 9.0, 10.0, 9.5, 90, "");
-            avaliacaoManager.adicionarAvaliacao(avaliacao);
+        // Atualizar notas do João
+        Matricula matriculaJoao = aluno1.getMatriculas().get(0);
+        avaliacaoManager.atualizarNotas(matriculaJoao, 7.0, 8.0, 6.0, 9.0, 10.0, 28, 30);
 
-            // Aqui você pode fazer chamadas para calcular média e status, se quiser
-            // Por exemplo, calcular média simples
-            double media = (avaliacao.getP1() + avaliacao.getP2() + avaliacao.getP3() + avaliacao.getListas() + avaliacao.getSeminario()) / 5.0;
+        Avaliacao avaliacaoJoao = matriculaJoao.getAvaliacao();
+        System.out.println("Avaliação João: " + avaliacaoJoao);
 
-            String status = media >= 7.0 && avaliacao.getFrequencia() >= 75 ? "Aprovado" : "Reprovado";
-            avaliacao.setStatus(status);
-
-            // Exibir avaliação
-            System.out.println("\n===== Avaliação =====");
-            System.out.println(avaliacao);
-        } else {
-            System.out.println("Matrícula não encontrada para lançamento de avaliação.");
-        }
-
-        // 🔹 Exibindo dados
-        System.out.println("\n===== Dados dos Alunos =====");
-        for (Aluno a : alunoManager.getAlunos()) {
+        // Mostrar alunos cadastrados
+        System.out.println("Lista de alunos:");
+        for (Aluno a : alunoManager.listarAlunos()) {
             System.out.println(a);
-        }
-
-        System.out.println("\n===== Disciplinas =====");
-        for (Disciplina d : disciplinaManager.getDisciplinas()) {
-            System.out.println(d);
-        }
-
-        System.out.println("\n===== Turmas =====");
-        for (Turma t : turmaManager.getTurmas()) {
-            System.out.println(t);
-        }
-
-        System.out.println("\n===== Matrículas =====");
-        for (Matricula m : matriculaManager.getMatriculas()) {
-            System.out.println(m);
         }
     }
 }

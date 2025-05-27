@@ -2,7 +2,6 @@ package managers;
 
 import models.Disciplina;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +12,15 @@ public class DisciplinaManager {
         disciplinas = new ArrayList<>();
     }
 
-    public void adicionarDisciplina(Disciplina d) {
+    public boolean adicionarDisciplina(Disciplina d) {
+        if (buscarPorCodigo(d.getCodigo()) != null) {
+            return false;
+        }
         disciplinas.add(d);
+        return true;
     }
 
-    public List<Disciplina> getDisciplinas() {
-        return disciplinas;
-    }
-
-    public Disciplina buscarDisciplinaPorCodigo(String codigo) {
+    public Disciplina buscarPorCodigo(String codigo) {
         for (Disciplina d : disciplinas) {
             if (d.getCodigo().equals(codigo)) {
                 return d;
@@ -30,27 +29,16 @@ public class DisciplinaManager {
         return null;
     }
 
-    public void removerDisciplina(String codigo) {
-        disciplinas.removeIf(d -> d.getCodigo().equals(codigo));
+    public List<Disciplina> listarDisciplinas() {
+        return disciplinas;
     }
 
-    public void salvarArquivo(String nomeArquivo) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
-            for (Disciplina d : disciplinas) {
-                writer.write(d.toCSVString());
-                writer.newLine();
-            }
+    public boolean removerDisciplina(String codigo) {
+        Disciplina d = buscarPorCodigo(codigo);
+        if (d != null) {
+            disciplinas.remove(d);
+            return true;
         }
-    }
-
-    public void carregarArquivo(String nomeArquivo) throws IOException {
-        disciplinas.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                Disciplina d = Disciplina.fromCSVString(linha);
-                disciplinas.add(d);
-            }
-        }
+        return false;
     }
 }

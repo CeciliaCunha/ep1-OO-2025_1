@@ -1,8 +1,9 @@
 package managers;
 
 import models.Aluno;
+import models.AlunoNormal;
+import models.AlunoEspecial;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,19 +14,15 @@ public class AlunoManager {
         alunos = new ArrayList<>();
     }
 
-    public void adicionarAluno(Aluno aluno) {
+    public boolean adicionarAluno(Aluno aluno) {
+        if (buscarPorMatricula(aluno.getMatricula()) != null) {
+            return false; // já existe matrícula
+        }
         alunos.add(aluno);
+        return true;
     }
 
-    public List<Aluno> getAlunos() {
-        return alunos;
-    }
-
-    public void removerAluno(String matricula) {
-        alunos.removeIf(a -> a.getMatricula().equals(matricula));
-    }
-
-    public Aluno buscarAlunoPorMatricula(String matricula) {
+    public Aluno buscarPorMatricula(String matricula) {
         for (Aluno a : alunos) {
             if (a.getMatricula().equals(matricula)) {
                 return a;
@@ -34,23 +31,16 @@ public class AlunoManager {
         return null;
     }
 
-    public void salvarArquivo(String nomeArquivo) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
-            for (Aluno a : alunos) {
-                writer.write(a.toCSVString());
-                writer.newLine();
-            }
-        }
+    public List<Aluno> listarAlunos() {
+        return alunos;
     }
 
-    public void carregarArquivo(String nomeArquivo) throws IOException {
-        alunos.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                Aluno a = Aluno.fromCSVString(linha);
-                alunos.add(a);
-            }
+    public boolean removerAluno(String matricula) {
+        Aluno a = buscarPorMatricula(matricula);
+        if (a != null) {
+            alunos.remove(a);
+            return true;
         }
+        return false;
     }
 }

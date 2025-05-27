@@ -1,73 +1,50 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Aluno {
-    protected String matricula;
-    protected String nome;
-    protected String curso;
+    private String nome;
+    private String matricula;
+    private String curso;
+    private List<Matricula> matriculas;
 
-    public Aluno() {}
-
-    public Aluno(String matricula, String nome, String curso) {
-        this.matricula = matricula;
+    public Aluno(String nome, String matricula, String curso) {
         this.nome = nome;
-        this.curso = curso;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
         this.matricula = matricula;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCurso() {
-        return curso;
-    }
-
-    public void setCurso(String curso) {
         this.curso = curso;
+        this.matriculas = new ArrayList<>();
     }
 
-    public abstract String getTipoAluno();
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    // Método para converter para CSV
-    public String toCSVString() {
-        return matricula + "," + nome + "," + curso + "," + getTipoAluno();
+    public String getMatricula() { return matricula; }
+
+    public String getCurso() { return curso; }
+    public void setCurso(String curso) { this.curso = curso; }
+
+    public List<Matricula> getMatriculas() { return matriculas; }
+
+    public void adicionarMatricula(Matricula m) {
+        matriculas.add(m);
     }
 
-    // Método para criar Aluno a partir do CSV
-    public static Aluno fromCSVString(String csv) {
-        String[] parts = csv.split(",");
-        String matricula = parts[0];
-        String nome = parts[1];
-        String curso = parts[2];
-        String tipo = parts[3];
-
-        if (tipo.equals("Normal")) {
-            return new AlunoNormal(matricula, nome, curso);
-        } else if (tipo.equals("Especial")) {
-            return new AlunoEspecial(matricula, nome, curso);
-        } else {
-            throw new IllegalArgumentException("Tipo de aluno desconhecido: " + tipo);
-        }
+    public boolean trancarMatricula(Matricula m) {
+        return matriculas.remove(m);
     }
+
+    public abstract int maxDisciplinas();
+
+    public abstract boolean recebeNotas();
 
     @Override
     public String toString() {
         return "Aluno{" +
-                "matricula='" + matricula + '\'' +
-                ", nome='" + nome + '\'' +
+                "nome='" + nome + '\'' +
+                ", matricula='" + matricula + '\'' +
                 ", curso='" + curso + '\'' +
-                ", tipo='" + getTipoAluno() + '\'' +
+                ", matriculas=" + matriculas.size() +
                 '}';
     }
 }

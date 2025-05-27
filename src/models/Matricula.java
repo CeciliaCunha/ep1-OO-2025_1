@@ -1,46 +1,25 @@
 package models;
 
 public class Matricula {
-    private String matriculaAluno;
-    private String codigoTurma;
+    private Aluno aluno;
+    private Turma turma;
+    private Avaliacao avaliacao;
 
-    public Matricula() {}
-
-    public Matricula(String matriculaAluno, String codigoTurma) {
-        this.matriculaAluno = matriculaAluno;
-        this.codigoTurma = codigoTurma;
+    public Matricula(Aluno aluno, Turma turma) {
+        this.aluno = aluno;
+        this.turma = turma;
+        this.avaliacao = new Avaliacao();
     }
 
-    public String getMatriculaAluno() {
-        return matriculaAluno;
-    }
-
-    public void setMatriculaAluno(String matriculaAluno) {
-        this.matriculaAluno = matriculaAluno;
-    }
-
-    public String getCodigoTurma() {
-        return codigoTurma;
-    }
-
-    public void setCodigoTurma(String codigoTurma) {
-        this.codigoTurma = codigoTurma;
-    }
-
-    public String toCSVString() {
-        return matriculaAluno + "," + codigoTurma;
-    }
-
-    public static Matricula fromCSVString(String csv) {
-        String[] parts = csv.split(",");
-        return new Matricula(parts[0], parts[1]);
-    }
+    public Aluno getAluno() { return aluno; }
+    public Turma getTurma() { return turma; }
+    public Avaliacao getAvaliacao() { return avaliacao; }
 
     @Override
     public String toString() {
         return "Matricula{" +
-                "matriculaAluno='" + matriculaAluno + '\'' +
-                ", codigoTurma='" + codigoTurma + '\'' +
+                "aluno=" + aluno.getMatricula() +
+                ", turma=" + turma.getDisciplina().getCodigo() +
                 '}';
     }
 }
