@@ -2,6 +2,10 @@ package models;
 
 import java.util.List;
 
+/**
+ * Representa uma disciplina.
+ */
+
 public class Disciplina {
     private String nome;
     private String codigo;
@@ -19,28 +23,28 @@ public class Disciplina {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getCodigo() {
         return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     public int getCargaHoraria() {
         return cargaHoraria;
     }
 
-    public void setCargaHoraria(int cargaHoraria) {
-        this.cargaHoraria = cargaHoraria;
-    }
-
     public List<String> getPreRequisitos() {
         return preRequisitos;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public void setCargaHoraria(int cargaHoraria) {
+        this.cargaHoraria = cargaHoraria;
     }
 
     public void setPreRequisitos(List<String> preRequisitos) {
@@ -49,6 +53,6 @@ public class Disciplina {
 
     @Override
     public String toString() {
-        return "Disciplina: " + nome + " (" + codigo + "), Carga Horaria: " + cargaHoraria;
+        return "Disciplina: " + nome + " (" + codigo + ") | Carga Horaria: " + cargaHoraria + " | Pre-requisitos: " + preRequisitos;
     }
 }

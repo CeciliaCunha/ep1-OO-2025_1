@@ -1,11 +1,15 @@
 package models;
 
+/**
+ * Representa um aluno.
+ */
+
 public class Aluno {
     private String nome;
     private String matricula;
     private String curso;
 
-    private Aluno(String nome, String matricula, String curso) {
+    public Aluno(String nome, String matricula, String curso) {
         this.nome = nome;
         this.matricula = matricula;
         this.curso = curso;
@@ -37,6 +41,6 @@ public class Aluno {
 
     @Override
     public String toString() {
-        return "Aluno: " + nome + ", Matricula: " + matricula + ", Curso: " + curso;
+        return "Aluno: " + nome + " | Matricula: " + matricula + " | Curso: " + curso;
     }
 }

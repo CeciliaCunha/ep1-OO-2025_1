@@ -1,5 +1,9 @@
 package models;
 
+/**
+ * Representa uma turma de uma disciplina.
+ */
+
 public class Turma {
     private String codigoDisciplina;
     private String professor;
@@ -24,63 +28,71 @@ public class Turma {
     public String getCodigoDisciplina() {
         return codigoDisciplina;
     }
-    public void setCodigoDisciplina(String codigoDisciplina) {
-        this.codigoDisciplina = codigoDisciplina;
-    }
 
     public String getProfessor() {
         return professor;
-    }
-    public void setProfessor(String professor) {
-        this.professor = professor;
     }
 
     public String getSemestre() {
         return semestre;
     }
-    public void setSemestre(String semestre) {
-        this.semestre = semestre;
-    }
 
     public String getFormaAvaliacao() {
         return formaAvaliacao;
-    }
-    public void setFormaAvaliacao(String formaAvaliacao) {
-        this.formaAvaliacao = formaAvaliacao;
     }
 
     public boolean isPresencial() {
         return presencial;
     }
-    public void setPresencial(boolean presencial) {
-        this.presencial = presencial;
-    }
 
     public String getSala() {
         return sala;
-    }
-    public void setSala(String sala) {
-        this.sala = sala;
     }
 
     public String getHorario() {
         return horario;
     }
-    public void setHorario(String horario) {
-        this.horario = horario;
-    }
 
     public int getCapacidadeMaxima() {
         return capacidadeMaxima;
     }
+
+    public void setCodigoDisciplina(String codigoDisciplina) {
+        this.codigoDisciplina = codigoDisciplina;
+    }
+
+    public void setProfessor(String professor) {
+        this.professor = professor;
+    }
+
+    public void setSemestre(String semestre) {
+        this.semestre = semestre;
+    }
+
+    public void setFormaAvaliacao(String formaAvaliacao) {
+        this.formaAvaliacao = formaAvaliacao;
+    }
+
+    public void setPresencial(boolean presencial) {
+        this.presencial = presencial;
+    }
+
+    public void setSala(String sala) {
+        this.sala = sala;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+
     public void setCapacidadeMaxima(int capacidadeMaxima) {
         this.capacidadeMaxima = capacidadeMaxima;
     }
 
     @Override
     public String toString() {
-        return "Turma da disciplina " + codigoDisciplina + ", Professor: " + professor + ", Semestre: " + semestre +
-               ", Avaliação: " + formaAvaliacao + ", " + (presencial ? "Presencial" : "Remota") +
-               ", Sala: " + sala + ", Horário: " + horario + ", Capacidade: " + capacidadeMaxima;
+        return "Turma da disciplina: " + codigoDisciplina + " | Professor: " + professor + 
+            " | Semestre: " + semestre + " | Avaliacao: " + formaAvaliacao + " | " + (presencial ? "Presencial" : "Remota") 
+            + " | Sala: " + sala + " | Horario: " + horario + " | Capacidade: " + capacidadeMaxima;
     }
 }
