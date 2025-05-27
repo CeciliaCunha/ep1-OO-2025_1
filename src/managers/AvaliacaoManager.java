@@ -1,32 +1,30 @@
 package managers;
 
-import models.Aluno;
 import models.Matricula;
-import models.Turma;
+import models.Avaliacao;
 
 public class AvaliacaoManager {
 
-    private MatriculasManager matriculasManager;
-
-    public AvaliacaoManager(MatriculasManager matriculasManager) {
-        this.matriculasManager = matriculasManager;
+    public void lancarNotas(Matricula matricula, double p1, double p2, double p3, double listas, double seminario) {
+        matricula.getAvaliacao().lancarNotas(p1, p2, p3, listas, seminario);
     }
 
-    /**
-     * Método para lançar notas e frequência de um aluno em uma turma.
-     */
-    public void lancarNotasFrequencia(Aluno aluno, Turma turma, double p1, double p2, double p3,
-                                      double listas, double seminario, double frequencia) throws Exception {
-        Matricula matricula = matriculasManager.buscarMatricula(aluno, turma);
-        if (matricula == null) {
-            throw new Exception("Aluno não está matriculado nesta turma");
-        }
-        // Atualiza as notas e frequência na avaliação da matrícula
-        matricula.getAvaliacao().setP1(p1);
-        matricula.getAvaliacao().setP2(p2);
-        matricula.getAvaliacao().setP3(p3);
-        matricula.getAvaliacao().setListas(listas);
-        matricula.getAvaliacao().setSeminario(seminario);
-        matricula.getAvaliacao().setFrequencia(frequencia);
+    public void lancarFrequencia(Matricula matricula, double frequencia) {
+        matricula.getAvaliacao().lancarFrequencia(frequencia);
+    }
+
+    public void calcularMedia(Matricula matricula, String forma) {
+        matricula.getAvaliacao().calcularMedia(forma);
+    }
+
+    public void avaliarSituacao(Matricula matricula) {
+        matricula.getAvaliacao().avaliarSituacao();
+    }
+
+    public void exibirAvaliacao(Matricula matricula) {
+        Avaliacao a = matricula.getAvaliacao();
+        System.out.println("Média: " + a.getMedia());
+        System.out.println("Frequência: " + a.getFrequencia());
+        System.out.println("Situação: " + a.getSituacao());
     }
 }

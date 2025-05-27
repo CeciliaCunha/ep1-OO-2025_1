@@ -1,36 +1,28 @@
 package managers;
 
-import models.Turma;
 import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Gerencia operações relacionadas ás turmas.
- */
+import models.Disciplina;
+import models.Turma;
 
 public class TurmaManager {
-    private List<Turma> turmas;
+    private ArrayList<Turma> turmas = new ArrayList<>();
 
-    public TurmaManager() {
-        turmas = new ArrayList<>();
+    public void adicionarTurma(Disciplina disciplina, String codigoTurma) {
+        turmas.add(new Turma(disciplina, codigoTurma));
     }
 
-    public void adicionarTurma(Turma t) {
-        turmas.add(t);
-    }
-
-    public List<Turma> listarTurmas() {
-        return turmas;
-    }
-
-    // Busca turmas por código da disciplina
-    public List<Turma> buscarPorCodigoDisciplina(String codigo) {
-        List<Turma> resultado = new ArrayList<>();
+    public Turma buscarTurma(String codigoTurma) {
         for (Turma t : turmas) {
-            if (t.getCodigoDisciplina().equals(codigo)) {
-                resultado.add(t);
+            if (t.getCodigoTurma().equals(codigoTurma)) {
+                return t;
             }
         }
-        return resultado;
+        return null;
+    }
+
+    public void listarTurmas() {
+        for (Turma t : turmas) {
+            System.out.println(t.getCodigoTurma() + " - " + t.getDisciplina().getNome());
+        }
     }
 }

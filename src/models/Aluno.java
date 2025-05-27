@@ -15,6 +15,10 @@ public abstract class Aluno {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String getMatricula() {
         return matricula;
     }
@@ -23,20 +27,9 @@ public abstract class Aluno {
         return curso;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public void setCurso(String curso) {
         this.curso = curso;
     }
 
-    public abstract boolean podeCursarMaisDisciplinas(int matriculasAtuais);
-
-    public abstract boolean recebeNotas();
-
-    @Override
-    public String toString() {
-        return nome + " (" + matricula + ") - " + curso;
-    }
+    public abstract String getTipoAluno();
 }

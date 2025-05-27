@@ -1,35 +1,27 @@
 package managers;
 
-import models.Disciplina;
 import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Gerencia operações relacionadas ás disciplinas.
- */
+import models.Disciplina;
 
 public class DisciplinaManager {
-    private List<Disciplina> disciplinas;
+    private ArrayList<Disciplina> disciplinas = new ArrayList<>();
 
-    public DisciplinaManager() {
-        this.disciplinas = new ArrayList<>();
+    public void adicionarDisciplina(String nome, String codigo) {
+        disciplinas.add(new Disciplina(nome, codigo));
     }
 
-    public void adicionarDisciplina(Disciplina d) {
-        disciplinas.add(d);
-    }
-
-    public List<Disciplina> listarDisciplinas() {
-        return disciplinas;
-    }
-
-    public Disciplina buscarPorCodigo(String codigo) {
-        for(Disciplina d : disciplinas) {
-            if(d.getCodigo().equals(codigo)) {
+    public Disciplina buscarDisciplina(String codigo) {
+        for (Disciplina d : disciplinas) {
+            if (d.getCodigo().equals(codigo)) {
                 return d;
             }
         }
-
         return null;
+    }
+
+    public void listarDisciplinas() {
+        for (Disciplina d : disciplinas) {
+            System.out.println(d.getNome() + " - " + d.getCodigo());
+        }
     }
 }

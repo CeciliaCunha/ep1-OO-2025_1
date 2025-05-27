@@ -1,47 +1,41 @@
 package managers;
 
-import models.Aluno;
 import java.util.ArrayList;
-import java.util.List;
+import models.Aluno;
+import models.AlunoEspecial;
+import models.AlunoNormal;
 
-/**
- *  Gerencia operações relacionadas aos alunos.
- */
 public class AlunoManager {
-    private List<Aluno> alunos;
-    
-    public AlunoManager() {
-        alunos = new ArrayList<>();
-    }
+    private ArrayList<Aluno> alunos = new ArrayList<>();
 
-    /**
-     * Adiciona um aluno na lista, verificando se já existe pela matrícula.
-     * @param aluno Objeto Aluno a ser adicionado.
-     * @return true se adicionou, false se matrícula já existe.
-     */
+    public void adicionarAluno(String tipo, String nome, String matricula, String curso) {
+        Aluno aluno = tipo.equalsIgnoreCase("especial")
+                ? new AlunoEspecial(nome, matricula, curso)
+                : new AlunoNormal(nome, matricula, curso);
 
-    public boolean adicionarAluno(Aluno aluno) {
-        //verifica duplicidade pela matrícula
-        for(Aluno a : alunos) {
-            if(a.getMatricula(). equals(aluno.getMatricula())) {
-                return false; //ja existe aluno com essa matricula
-            }
-        }
         alunos.add(aluno);
-        return true;
     }
 
-    public List<Aluno> listarAlunos() {
-        return alunos;
-    }
-
-    public Aluno buscarPorMatricula(String matricula) {
-        for(Aluno a : alunos) {
-            if(a.getMatricula().equals(matricula)) {
+    public Aluno buscarAluno(String matricula) {
+        for (Aluno a : alunos) {
+            if (a.getMatricula().equals(matricula)) {
                 return a;
             }
         }
+        return null;
+    }
 
-        return null; //nao encontrado
+    public void editarAluno(String matricula, String novoNome, String novoCurso) {
+        Aluno aluno = buscarAluno(matricula);
+        if (aluno != null) {
+            aluno.setNome(novoNome);
+            aluno.setCurso(novoCurso);
+        }
+    }
+
+    public void listarAlunos() {
+        for (Aluno a : alunos) {
+            System.out.println(a.getNome() + " - " + a.getMatricula() + " - " + a.getTipoAluno());
+        }
     }
 }

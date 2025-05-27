@@ -7,14 +7,7 @@ public class AlunoEspecial extends Aluno {
     }
 
     @Override
-    public boolean podeCursarMaisDisciplinas(int matriculasAtuais) {
-        // Aluno especial pode cursar no máximo 2 disciplinas
-        return matriculasAtuais < 2;
-    }
-
-    @Override
-    public boolean recebeNotas() {
-        // Aluno especial não recebe notas, só frequência
-        return false;
+    public String getTipoAluno() {
+        return "Especial";
     }
 }

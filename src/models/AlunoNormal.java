@@ -7,13 +7,7 @@ public class AlunoNormal extends Aluno {
     }
 
     @Override
-    public boolean podeCursarMaisDisciplinas(int matriculasAtuais) {
-        // Aluno normal não tem limite de disciplinas
-        return true;
-    }
-
-    @Override
-    public boolean recebeNotas() {
-        return true;
+    public String getTipoAluno() {
+        return "Normal";
     }
 }
