@@ -1,22 +1,31 @@
 package managers;
 
-import java.util.ArrayList;
 import models.Aluno;
-import models.AlunoEspecial;
-import models.AlunoNormal;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlunoManager {
-    private ArrayList<Aluno> alunos = new ArrayList<>();
+    private List<Aluno> alunos;
 
-    public void adicionarAluno(String tipo, String nome, String matricula, String curso) {
-        Aluno aluno = tipo.equalsIgnoreCase("especial")
-                ? new AlunoEspecial(nome, matricula, curso)
-                : new AlunoNormal(nome, matricula, curso);
+    public AlunoManager() {
+        alunos = new ArrayList<>();
+    }
 
+    public void adicionarAluno(Aluno aluno) {
         alunos.add(aluno);
     }
 
-    public Aluno buscarAluno(String matricula) {
+    public List<Aluno> getAlunos() {
+        return alunos;
+    }
+
+    public void removerAluno(String matricula) {
+        alunos.removeIf(a -> a.getMatricula().equals(matricula));
+    }
+
+    public Aluno buscarAlunoPorMatricula(String matricula) {
         for (Aluno a : alunos) {
             if (a.getMatricula().equals(matricula)) {
                 return a;
@@ -25,17 +34,23 @@ public class AlunoManager {
         return null;
     }
 
-    public void editarAluno(String matricula, String novoNome, String novoCurso) {
-        Aluno aluno = buscarAluno(matricula);
-        if (aluno != null) {
-            aluno.setNome(novoNome);
-            aluno.setCurso(novoCurso);
+    public void salvarArquivo(String nomeArquivo) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
+            for (Aluno a : alunos) {
+                writer.write(a.toCSVString());
+                writer.newLine();
+            }
         }
     }
 
-    public void listarAlunos() {
-        for (Aluno a : alunos) {
-            System.out.println(a.getNome() + " - " + a.getMatricula() + " - " + a.getTipoAluno());
+    public void carregarArquivo(String nomeArquivo) throws IOException {
+        alunos.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Aluno a = Aluno.fromCSVString(linha);
+                alunos.add(a);
+            }
         }
     }
 }

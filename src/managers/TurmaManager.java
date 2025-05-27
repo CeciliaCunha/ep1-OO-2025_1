@@ -1,28 +1,56 @@
 package managers;
 
-import java.util.ArrayList;
-import models.Disciplina;
 import models.Turma;
 
-public class TurmaManager {
-    private ArrayList<Turma> turmas = new ArrayList<>();
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
-    public void adicionarTurma(Disciplina disciplina, String codigoTurma) {
-        turmas.add(new Turma(disciplina, codigoTurma));
+public class TurmaManager {
+    private List<Turma> turmas;
+
+    public TurmaManager() {
+        turmas = new ArrayList<>();
     }
 
-    public Turma buscarTurma(String codigoTurma) {
+    public void adicionarTurma(Turma t) {
+        turmas.add(t);
+    }
+
+    public List<Turma> getTurmas() {
+        return turmas;
+    }
+
+    public Turma buscarTurmaPorCodigo(String codigoDisciplina) {
         for (Turma t : turmas) {
-            if (t.getCodigoTurma().equals(codigoTurma)) {
+            if (t.getCodigoDisciplina().equals(codigoDisciplina)) {
                 return t;
             }
         }
         return null;
     }
 
-    public void listarTurmas() {
-        for (Turma t : turmas) {
-            System.out.println(t.getCodigoTurma() + " - " + t.getDisciplina().getNome());
+    public void removerTurma(String codigoDisciplina) {
+        turmas.removeIf(t -> t.getCodigoDisciplina().equals(codigoDisciplina));
+    }
+
+    public void salvarArquivo(String nomeArquivo) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
+            for (Turma t : turmas) {
+                writer.write(t.toCSVString());
+                writer.newLine();
+            }
+        }
+    }
+
+    public void carregarArquivo(String nomeArquivo) throws IOException {
+        turmas.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Turma t = Turma.fromCSVString(linha);
+                turmas.add(t);
+            }
         }
     }
 }

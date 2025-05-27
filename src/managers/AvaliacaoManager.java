@@ -1,30 +1,49 @@
 package managers;
 
-import models.Matricula;
 import models.Avaliacao;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class AvaliacaoManager {
+    private List<Avaliacao> avaliacoes;
 
-    public void lancarNotas(Matricula matricula, double p1, double p2, double p3, double listas, double seminario) {
-        matricula.getAvaliacao().lancarNotas(p1, p2, p3, listas, seminario);
+    public AvaliacaoManager() {
+        avaliacoes = new ArrayList<>();
     }
 
-    public void lancarFrequencia(Matricula matricula, double frequencia) {
-        matricula.getAvaliacao().lancarFrequencia(frequencia);
+    public void adicionarAvaliacao(Avaliacao a) {
+        avaliacoes.add(a);
     }
 
-    public void calcularMedia(Matricula matricula, String forma) {
-        matricula.getAvaliacao().calcularMedia(forma);
+    public List<Avaliacao> getAvaliacoes() {
+        return avaliacoes;
     }
 
-    public void avaliarSituacao(Matricula matricula) {
-        matricula.getAvaliacao().avaliarSituacao();
+    public void removerAvaliacao(int index) {
+        if (index >= 0 && index < avaliacoes.size()) {
+            avaliacoes.remove(index);
+        }
     }
 
-    public void exibirAvaliacao(Matricula matricula) {
-        Avaliacao a = matricula.getAvaliacao();
-        System.out.println("Média: " + a.getMedia());
-        System.out.println("Frequência: " + a.getFrequencia());
-        System.out.println("Situação: " + a.getSituacao());
+    public void salvarArquivo(String nomeArquivo) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
+            for (Avaliacao a : avaliacoes) {
+                writer.write(a.toCSVString());
+                writer.newLine();
+            }
+        }
+    }
+
+    public void carregarArquivo(String nomeArquivo) throws IOException {
+        avaliacoes.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomeArquivo))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Avaliacao a = Avaliacao.fromCSVString(linha);
+                avaliacoes.add(a);
+            }
+        }
     }
 }

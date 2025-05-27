@@ -2,8 +2,10 @@ package models;
 
 public class AlunoEspecial extends Aluno {
 
-    public AlunoEspecial(String nome, String matricula, String curso) {
-        super(nome, matricula, curso);
+    public AlunoEspecial() {}
+
+    public AlunoEspecial(String matricula, String nome, String curso) {
+        super(matricula, nome, curso);
     }
 
     @Override
