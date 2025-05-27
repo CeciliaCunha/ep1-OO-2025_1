@@ -16,17 +16,14 @@ public class Aluno {
 
     private List<Matricula> matriculas = new ArrayList<>();
 
-    public boolean cursouDisciplina(String codigoDisciplina) {
-        if (disciplinasCursadas == null) {
-            return false;
-        }
-        return disciplinasCursadas.contains(codigoDisciplina);
-    }
-    
     public Aluno(String nome, String matricula, String curso) {
         this.nome = nome;
         this.matricula = matricula;
         this.curso = curso;
+    }
+
+    public boolean cursouDisciplina(String codigoDisciplina) {
+        return disciplinasCursadas.contains(codigoDisciplina);
     }
 
     public List<Matricula> getMatriculas() {
@@ -37,6 +34,30 @@ public class Aluno {
         matriculas.add(matricula);
     }
 
+    // Retorna só as matrículas em turmas ainda cursando (exemplo: situação diferente de finalizada)
+    public List<Matricula> getMatriculasAtivas() {
+        List<Matricula> ativas = new ArrayList<>();
+        for (Matricula m : matriculas) {
+            String situacao = m.situacaoFinal();
+            // Considere "Aprovado" ou "Reprovado" como finalizadas, outras como ativas
+            if (!situacao.startsWith("Aprovado") && !situacao.startsWith("Reprovado")) {
+                ativas.add(m);
+            }
+        }
+        return ativas;
+    }
+
+    // Atualizar disciplinas cursadas com base nas matrículas aprovadas
+    public void atualizarDisciplinasCursadas() {
+        for (Matricula m : matriculas) {
+            if (m.situacaoFinal().startsWith("Aprovado")) {
+                String codigoDisc = m.getTurma().getCodigoDisciplina();
+                if (!disciplinasCursadas.contains(codigoDisc)) {
+                    disciplinasCursadas.add(codigoDisc);
+                }
+            }
+        }
+    }
 
     public String getNome() {
         return nome;
