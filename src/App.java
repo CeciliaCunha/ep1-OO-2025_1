@@ -112,7 +112,7 @@ public class App {
                     System.out.print("Nota: ");
                     double nota = Double.parseDouble(sc.nextLine());
                     a.setNota(nota);
-                    System.out.print("Presença (%): ");
+                    System.out.print("Presenca (%): ");
                     double presenca = Double.parseDouble(sc.nextLine());
                     a.setPresenca(presenca);
                     avaliacaoManager.adicionarOuAtualizar(a);
