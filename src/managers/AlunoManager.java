@@ -4,43 +4,66 @@ import models.Aluno;
 import models.AlunoNormal;
 import models.AlunoEspecial;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class AlunoManager {
-    private List<Aluno> alunos;
+    private Map<String, Aluno> alunos;
+    private final String arquivo = "alunos.txt";
 
     public AlunoManager() {
-        alunos = new ArrayList<>();
+        alunos = new HashMap<>();
+        carregarArquivo();
     }
 
     public boolean adicionarAluno(Aluno aluno) {
-        if (buscarPorMatricula(aluno.getMatricula()) != null) {
-            return false; // já existe matrícula
+        if (alunos.containsKey(aluno.getMatricula())) {
+            return false;
         }
-        alunos.add(aluno);
+        alunos.put(aluno.getMatricula(), aluno);
+        salvarArquivo();
         return true;
     }
 
-    public Aluno buscarPorMatricula(String matricula) {
-        for (Aluno a : alunos) {
-            if (a.getMatricula().equals(matricula)) {
-                return a;
-            }
-        }
-        return null;
-    }
-
-    public List<Aluno> listarAlunos() {
-        return alunos;
+    public Aluno buscarAluno(String matricula) {
+        return alunos.get(matricula);
     }
 
     public boolean removerAluno(String matricula) {
-        Aluno a = buscarPorMatricula(matricula);
-        if (a != null) {
-            alunos.remove(a);
+        if (alunos.containsKey(matricula)) {
+            alunos.remove(matricula);
+            salvarArquivo();
             return true;
         }
         return false;
+    }
+
+    public List<Aluno> listarAlunos() {
+        return new ArrayList<>(alunos.values());
+    }
+
+    public void salvarArquivo() {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(arquivo))) {
+            for (Aluno a : alunos.values()) {
+                pw.println(a.toCSV());
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar alunos: " + e.getMessage());
+        }
+    }
+
+    public void carregarArquivo() {
+        alunos.clear();
+        File f = new File(arquivo);
+        if (!f.exists()) return;
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                Aluno a = Aluno.fromCSV(linha);
+                if (a != null) alunos.put(a.getMatricula(), a);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar alunos: " + e.getMessage());
+        }
     }
 }

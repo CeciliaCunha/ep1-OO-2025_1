@@ -1,18 +1,22 @@
 package models;
 
 public class AlunoEspecial extends Aluno {
-
-    public AlunoEspecial(String nome, String matricula, String curso) {
-        super(nome, matricula, curso);
+    public AlunoEspecial(String matricula, String nome, String curso) {
+        super(matricula, nome, curso);
     }
 
     @Override
-    public int maxDisciplinas() {
-        return 2;
+    public boolean podeMatricularMais(int qtdMatriculas) {
+        return qtdMatriculas < 2; // Máximo 2 disciplinas
     }
 
     @Override
     public boolean recebeNotas() {
-        return false;
+        return false; // Não recebe notas
+    }
+
+    @Override
+    public String getTipo() {
+        return "especial";
     }
 }

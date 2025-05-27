@@ -1,25 +1,59 @@
 package managers;
 
 import models.Avaliacao;
-import models.Matricula;
-import models.Turma;
+
+import java.io.*;
+import java.util.*;
 
 public class AvaliacaoManager {
+    private Map<String, Avaliacao> avaliacoes;
+    private final String arquivo = "avaliacoes.txt";
 
-    public void atualizarNotas(Matricula matricula, double p1, double p2, double p3, double listas, double seminario,
-                               int presencas, int aulasMinistradas) {
-        Avaliacao a = matricula.getAvaliacao();
-        a.setP1(p1);
-        a.setP2(p2);
-        a.setP3(p3);
-        a.setListas(listas);
-        a.setSeminario(seminario);
-        a.setPresencas(presencas);
-        a.setAulasMinistradas(aulasMinistradas);
+    public AvaliacaoManager() {
+        avaliacoes = new HashMap<>();
+        carregarArquivo();
+    }
 
-        Turma turma = matricula.getTurma();
-        boolean mediaPonderada = "MediaPonderada".equalsIgnoreCase(turma.getFormaAvaliacao());
+    public boolean adicionarAvaliacao(Avaliacao a) {
+        if (avaliacoes.containsKey(a.getIdMatricula())) return false;
+        avaliacoes.put(a.getIdMatricula(), a);
+        salvarArquivo();
+        return true;
+    }
 
-        a.avaliar(mediaPonderada);
+    public Avaliacao buscarAvaliacao(String idMatricula) {
+        return avaliacoes.get(idMatricula);
+    }
+
+    public boolean atualizarAvaliacao(Avaliacao a) {
+        if (!avaliacoes.containsKey(a.getIdMatricula())) return false;
+        avaliacoes.put(a.getIdMatricula(), a);
+        salvarArquivo();
+        return true;
+    }
+
+    public void salvarArquivo() {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(arquivo))) {
+            for (Avaliacao a : avaliacoes.values()) {
+                pw.println(a.toCSV());
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar avaliacoes: " + e.getMessage());
+        }
+    }
+
+    public void carregarArquivo() {
+        avaliacoes.clear();
+        File f = new File(arquivo);
+        if (!f.exists()) return;
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                Avaliacao a = Avaliacao.fromCSV(linha);
+                if (a != null) avaliacoes.put(a.getIdMatricula(), a);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar avaliacoes: " + e.getMessage());
+        }
     }
 }

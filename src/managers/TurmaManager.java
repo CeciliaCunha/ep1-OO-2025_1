@@ -2,43 +2,64 @@ package managers;
 
 import models.Turma;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class TurmaManager {
-    private List<Turma> turmas;
+    private Map<String, Turma> turmas;
+    private final String arquivo = "turmas.txt";
 
     public TurmaManager() {
-        turmas = new ArrayList<>();
+        turmas = new HashMap<>();
+        carregarArquivo();
     }
 
     public boolean adicionarTurma(Turma t) {
-        if (buscarTurma(t.getDisciplina().getCodigo(), t.getSemestre()) != null) {
-            return false; // Já existe turma dessa disciplina no semestre
-        }
-        turmas.add(t);
+        if (turmas.containsKey(t.getCodigoTurma())) return false;
+        turmas.put(t.getCodigoTurma(), t);
+        salvarArquivo();
         return true;
     }
 
-    public Turma buscarTurma(String codigoDisciplina, String semestre) {
-        for (Turma t : turmas) {
-            if (t.getDisciplina().getCodigo().equals(codigoDisciplina) && t.getSemestre().equals(semestre)) {
-                return t;
-            }
-        }
-        return null;
+    public Turma buscarTurma(String codigoTurma) {
+        return turmas.get(codigoTurma);
     }
 
-    public List<Turma> listarTurmas() {
-        return turmas;
-    }
-
-    public boolean removerTurma(String codigoDisciplina, String semestre) {
-        Turma t = buscarTurma(codigoDisciplina, semestre);
-        if (t != null) {
-            turmas.remove(t);
+    public boolean removerTurma(String codigoTurma) {
+        if (turmas.containsKey(codigoTurma)) {
+            turmas.remove(codigoTurma);
+            salvarArquivo();
             return true;
         }
         return false;
+    }
+
+    public List<Turma> listarTurmas() {
+        return new ArrayList<>(turmas.values());
+    }
+
+    public void salvarArquivo() {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(arquivo))) {
+            for (Turma t : turmas.values()) {
+                pw.println(t.toCSV());
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar turmas: " + e.getMessage());
+        }
+    }
+
+    public void carregarArquivo() {
+        turmas.clear();
+        File f = new File(arquivo);
+        if (!f.exists()) return;
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                Turma t = Turma.fromCSV(linha);
+                if (t != null) turmas.put(t.getCodigoTurma(), t);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar turmas: " + e.getMessage());
+        }
     }
 }

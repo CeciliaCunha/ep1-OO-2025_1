@@ -1,18 +1,22 @@
 package models;
 
 public class AlunoNormal extends Aluno {
-
-    public AlunoNormal(String nome, String matricula, String curso) {
-        super(nome, matricula, curso);
+    public AlunoNormal(String matricula, String nome, String curso) {
+        super(matricula, nome, curso);
     }
 
     @Override
-    public int maxDisciplinas() {
-        return Integer.MAX_VALUE;
+    public boolean podeMatricularMais(int qtdMatriculas) {
+        return true; // Normal não tem limite
     }
 
     @Override
     public boolean recebeNotas() {
         return true;
+    }
+
+    @Override
+    public String getTipo() {
+        return "normal";
     }
 }

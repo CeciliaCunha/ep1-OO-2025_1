@@ -1,62 +1,67 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Turma {
-    private Disciplina disciplina;
+    private String codigoTurma; // Ex: DISC01-2025-1
+    private String codigoDisciplina;
     private String professor;
     private String semestre;
-    private String formaAvaliacao;  // "MediaSimples" ou "MediaPonderada"
+    private int tipoAvaliacao; // 1 ou 2 (definido na descrição)
     private boolean presencial;
-    private String sala; // null se remoto
+    private String sala; // vazio se remoto
     private String horario;
-    private int capacidadeMaxima;
-    private List<Matricula> matriculas;
+    private int capacidade;
 
-    public Turma(Disciplina disciplina, String professor, String semestre, String formaAvaliacao,
-                 boolean presencial, String sala, String horario, int capacidadeMaxima) {
-        this.disciplina = disciplina;
+    public Turma(String codigoTurma, String codigoDisciplina, String professor,
+                 String semestre, int tipoAvaliacao, boolean presencial,
+                 String sala, String horario, int capacidade) {
+        this.codigoTurma = codigoTurma;
+        this.codigoDisciplina = codigoDisciplina;
         this.professor = professor;
         this.semestre = semestre;
-        this.formaAvaliacao = formaAvaliacao;
+        this.tipoAvaliacao = tipoAvaliacao;
         this.presencial = presencial;
-        this.sala = presencial ? sala : null;
+        this.sala = sala;
         this.horario = horario;
-        this.capacidadeMaxima = capacidadeMaxima;
-        this.matriculas = new ArrayList<>();
+        this.capacidade = capacidade;
     }
 
-    public Disciplina getDisciplina() { return disciplina; }
+    public String getCodigoTurma() { return codigoTurma; }
+    public String getCodigoDisciplina() { return codigoDisciplina; }
     public String getProfessor() { return professor; }
     public String getSemestre() { return semestre; }
-    public String getFormaAvaliacao() { return formaAvaliacao; }
+    public int getTipoAvaliacao() { return tipoAvaliacao; }
     public boolean isPresencial() { return presencial; }
     public String getSala() { return sala; }
     public String getHorario() { return horario; }
-    public int getCapacidadeMaxima() { return capacidadeMaxima; }
-    public List<Matricula> getMatriculas() { return matriculas; }
+    public int getCapacidade() { return capacidade; }
 
-    public boolean adicionarMatricula(Matricula matricula) {
-        if (matriculas.size() >= capacidadeMaxima) {
-            return false;
-        }
-        matriculas.add(matricula);
-        return true;
+    public void setProfessor(String professor) { this.professor = professor; }
+    public void setSemestre(String semestre) { this.semestre = semestre; }
+    public void setTipoAvaliacao(int tipo) { this.tipoAvaliacao = tipo; }
+    public void setPresencial(boolean presencial) { this.presencial = presencial; }
+    public void setSala(String sala) { this.sala = sala; }
+    public void setHorario(String horario) { this.horario = horario; }
+    public void setCapacidade(int capacidade) { this.capacidade = capacidade; }
+
+    // CSV: codigoTurma,codigoDisciplina,professor,semestre,tipoAvaliacao,presencial,sala,horario,capacidade
+    public String toCSV() {
+        return codigoTurma + "," + codigoDisciplina + "," + professor + "," + semestre + "," +
+                tipoAvaliacao + "," + presencial + "," + (sala==null ? "" : sala) + "," + horario + "," + capacidade;
     }
 
-    @Override
-    public String toString() {
-        return "Turma{" +
-                "disciplina=" + disciplina.getCodigo() +
-                ", professor='" + professor + '\'' +
-                ", semestre='" + semestre + '\'' +
-                ", formaAvaliacao='" + formaAvaliacao + '\'' +
-                ", presencial=" + presencial +
-                ", sala='" + sala + '\'' +
-                ", horario='" + horario + '\'' +
-                ", capacidadeMaxima=" + capacidadeMaxima +
-                ", matriculas=" + matriculas.size() +
-                '}';
+    public static Turma fromCSV(String csvLine) {
+        String[] parts = csvLine.split(",", -1);
+        if (parts.length < 9) return null;
+        String codigoTurma = parts[0];
+        String codigoDisciplina = parts[1];
+        String professor = parts[2];
+        String semestre = parts[3];
+        int tipoAvaliacao = Integer.parseInt(parts[4]);
+        boolean presencial = Boolean.parseBoolean(parts[5]);
+        String sala = parts[6].isEmpty() ? null : parts[6];
+        String horario = parts[7];
+        int capacidade = Integer.parseInt(parts[8]);
+        return new Turma(codigoTurma, codigoDisciplina, professor, semestre, tipoAvaliacao,
+                presencial, sala, horario, capacidade);
     }
 }

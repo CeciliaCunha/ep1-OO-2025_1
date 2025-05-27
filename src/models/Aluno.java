@@ -1,50 +1,46 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class Aluno {
-    private String nome;
-    private String matricula;
-    private String curso;
-    private List<Matricula> matriculas;
+    protected String matricula;
+    protected String nome;
+    protected String curso;
 
-    public Aluno(String nome, String matricula, String curso) {
-        this.nome = nome;
+    public Aluno(String matricula, String nome, String curso) {
         this.matricula = matricula;
+        this.nome = nome;
         this.curso = curso;
-        this.matriculas = new ArrayList<>();
     }
-
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
 
     public String getMatricula() { return matricula; }
-
+    public String getNome() { return nome; }
     public String getCurso() { return curso; }
+
+    public void setNome(String nome) { this.nome = nome; }
     public void setCurso(String curso) { this.curso = curso; }
 
-    public List<Matricula> getMatriculas() { return matriculas; }
-
-    public void adicionarMatricula(Matricula m) {
-        matriculas.add(m);
-    }
-
-    public boolean trancarMatricula(Matricula m) {
-        return matriculas.remove(m);
-    }
-
-    public abstract int maxDisciplinas();
+    public abstract boolean podeMatricularMais(int qtdMatriculas);
 
     public abstract boolean recebeNotas();
 
-    @Override
-    public String toString() {
-        return "Aluno{" +
-                "nome='" + nome + '\'' +
-                ", matricula='" + matricula + '\'' +
-                ", curso='" + curso + '\'' +
-                ", matriculas=" + matriculas.size() +
-                '}';
+    // CSV (matricula,nome,curso,tipo)
+    public String toCSV() {
+        return matricula + "," + nome + "," + curso + "," + getTipo();
     }
+
+    public static Aluno fromCSV(String csvLine) {
+        String[] parts = csvLine.split(",");
+        if (parts.length < 4) return null;
+        String matricula = parts[0];
+        String nome = parts[1];
+        String curso = parts[2];
+        String tipo = parts[3];
+        if (tipo.equalsIgnoreCase("normal")) {
+            return new AlunoNormal(matricula, nome, curso);
+        } else if (tipo.equalsIgnoreCase("especial")) {
+            return new AlunoEspecial(matricula, nome, curso);
+        }
+        return null;
+    }
+
+    public abstract String getTipo();
 }
