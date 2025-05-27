@@ -41,20 +41,15 @@ java -cp bin App
 
 ## 📂 Estrutura de Pastas
 
-```
-ep1-OO-2025/
-│
-│
-├── bin/                # Arquivos compilados (.class)
-│
-├── src/                # Código-fonte
-│   ├── models/         # Classes de modelo (Aluno, Disciplina, Turma, Avaliacao, Matricula)
-│   ├── managers/       # Classes gerenciadoras (AlunoManager, DisciplinaManager, etc.)
+ep1-OO-2025_1/
+├── prints/             # Prints de tela para o README ou entrega
+├── src/                # Código fonte Java
+│   ├── models/         # Classes de modelo (Aluno, Turma, Avaliacao, etc.)
+│   ├── managers/       # Classes que gerenciam os modelos (CRUD)
 │   └── App.java        # Classe principal (main)
-│
-├── README.md           
-└── ...
-```
+├── README.md           # Documento de descrição do projeto
+├── .gitignore          # Arquivos/pastas ignorados pelo Git
+
 
 ---
 
