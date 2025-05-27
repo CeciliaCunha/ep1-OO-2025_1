@@ -5,6 +5,7 @@ package models;
  */
 
 public class Turma {
+    private String codigoTurma;
     private String codigoDisciplina;
     private String professor;
     private String semestre;
@@ -15,6 +16,7 @@ public class Turma {
     private int capacidadeMaxima;
 
     public Turma(String codigoDisciplina, String professor, String semestre, String formaAvaliacao, boolean presencial, String sala, String horario, int capacidadeMaxima){
+        this.codigoTurma = codigoTurma;
         this.codigoDisciplina = codigoDisciplina;
         this.professor = professor;
         this.semestre = semestre;
@@ -23,6 +25,10 @@ public class Turma {
         this.sala = sala;
         this.horario = horario;
         this.capacidadeMaxima = capacidadeMaxima;
+    }
+
+    public String getCodigoTurma() {
+        return codigoTurma;
     }
 
     public String getCodigoDisciplina() {
@@ -55,6 +61,10 @@ public class Turma {
 
     public int getCapacidadeMaxima() {
         return capacidadeMaxima;
+    }
+
+    public void setCodigoTurma(String codigoTurma) {
+        this.codigoTurma = codigoTurma;
     }
 
     public void setCodigoDisciplina(String codigoDisciplina) {
@@ -91,7 +101,7 @@ public class Turma {
 
     @Override
     public String toString() {
-        return "Turma da disciplina: " + codigoDisciplina + " | Professor: " + professor + 
+        return "Turma: " + codigoTurma + "| Disciplina: " + codigoDisciplina + " | Professor: " + professor + 
             " | Semestre: " + semestre + " | Avaliacao: " + formaAvaliacao + " | " + (presencial ? "Presencial" : "Remota") 
             + " | Sala: " + sala + " | Horario: " + horario + " | Capacidade: " + capacidadeMaxima;
     }
