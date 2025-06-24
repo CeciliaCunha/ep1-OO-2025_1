@@ -63,7 +63,7 @@ ep1-OO-2025_1/
 
 ## 🎥 Vídeo de Demonstração
 
-📺 [(https://drive.google.com/file/d/19ICDh-oZOkKvOmznszTDKbVr5gI3c0o6/view?usp=drive_link)]
+📺 [(https://drive.google.com/file/d/1TlKEBWBuhqqQ08OCPNL0rr3oiTR5tFdg/view?usp=sharing)]
 
 ---
 
